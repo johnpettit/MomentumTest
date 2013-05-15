@@ -17,6 +17,16 @@ namespace MomentumTest.lib
             _id = 0;
         }
 
+        public bool initContact(int contactId)
+        {
+            return true;
+        }
+
+        public int createContact(int pCustomerId, DateTime pCreateDate, string pNote)
+        {
+            return 1;
+        }
+
         //***************** PROPERTIES **********************/
 
         public int id
