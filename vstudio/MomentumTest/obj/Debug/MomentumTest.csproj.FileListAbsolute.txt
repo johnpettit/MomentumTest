@@ -1,0 +1,5 @@
+c:\users\xervanik\documents\visual studio 2010\Projects\MomentumTest\MomentumTest\bin\MomentumTest.dll
+c:\users\xervanik\documents\visual studio 2010\Projects\MomentumTest\MomentumTest\bin\MomentumTest.pdb
+c:\users\xervanik\documents\visual studio 2010\Projects\MomentumTest\MomentumTest\obj\Debug\ResolveAssemblyReference.cache
+c:\users\xervanik\documents\visual studio 2010\Projects\MomentumTest\MomentumTest\obj\Debug\MomentumTest.dll
+c:\users\xervanik\documents\visual studio 2010\Projects\MomentumTest\MomentumTest\obj\Debug\MomentumTest.pdb
