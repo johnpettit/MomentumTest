@@ -8,6 +8,16 @@ using MomentumTest.lib;
 
 namespace MomentumTest.lib
 {
+    /**
+     * Customer class
+     * Represents one Customer with its data,
+     * including its ContactCollection
+     * 
+     * General usage
+     * Instantiate a Customer object then
+     * call initCustomer with the id of
+     * the Customer you want to retrieve
+     */
     public class Customer : MBase
     {
         private int _id;

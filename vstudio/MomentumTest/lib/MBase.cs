@@ -5,10 +5,13 @@ using System.Web;
 
 namespace MomentumTest.lib
 {
-    //Base class for all App classes
-    //contains common items like:
-    //Logging - to do
-    //Error Visibility
+    /**
+     * MBase class
+     * Base class for all App classes (except Collections)
+     * contains common items like:
+     * Loggging - to do
+     * Error Visibility
+     */
     public class MBase
     {
         public string errorMessage;

@@ -5,6 +5,15 @@ using System.Web;
 
 namespace MomentumTest.lib
 {
+    /**
+     * Contact class
+     * Represents one Contact, with all of its data
+     * Also used to create a Contact
+     * 
+     * General usage is to instantiate a Contact object
+     * then call initContact with the id of the Contact 
+     * you want to fill it with.
+     */
     public class Contact : MBase
     {
         private int _id;

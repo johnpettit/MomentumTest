@@ -7,6 +7,11 @@ using System.Data;
 
 namespace MomentumTest.lib
 {
+    /**
+     * SqlServer class
+     * Single class to abstract away the database
+     * Handles conncetions, conncetion strings, runs queries, etc
+     */
     public class SqlServer : MBase
     {
         private string _conn_str;
