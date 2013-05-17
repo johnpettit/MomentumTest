@@ -20,19 +20,32 @@ namespace MomentumTest.lib
      */
     public class Customer : MBase
     {
-        private int _id;
-        private string _firstName;
-        private string _lastName;
-        private string _phoneNumber;
-        private string _email;
-        private ContactCollection _contacts;
+        /**
+         * Properties
+        */
+        public int id {get;set;}
+        public string firstName { get; set; }
+        public string lastName { get; set; }
+        public string phoneNumber { get; set; }
+        public string email { get; set; }
+        //private ContactCollection _contacts;
 
+        /**
+         * Constructor
+         * just set id to a non value
+         */
         public Customer()
         {
-            _id = 0;
+            id = 0;
         }
 
-        public bool initCustomer(int theId)
+        /**
+         * method initCustomer
+         * fetch from the database the Customer
+         * with the supplied id and populate the
+         * objects properties
+         */
+        public bool initCustomer(int customerId)
         {
             SqlServer sqlsvr = new SqlServer();
             DataSet ds;
@@ -40,8 +53,7 @@ namespace MomentumTest.lib
 
             try
             {
-                sql = "SELECT * FROM Customer WHERE id = " + id;
-
+                sql = "SELECT * FROM Customer WHERE id = " + customerId;
                 ds = sqlsvr.runSqlReturnDataSet(sql);
 
                 if (ds == null)
@@ -57,15 +69,13 @@ namespace MomentumTest.lib
                 }
 
                 DataRow row = ds.Tables[0].Rows[0];
+                id = customerId;
+                firstName = row["FirstName"].ToString();
+                lastName = row["LastName"].ToString();
+                phoneNumber = row["PhoneNumber"].ToString();
+                email = row["Email"].ToString();
 
-                _id = theId;
-                _firstName = row["FirstName"].ToString();
-                _lastName = row["LastName"].ToString();
-                _phoneNumber = row["Phone"].ToString();
-                _email = row["Email"].ToString();
-
-                //init contacts
-
+                // TO DO     - init contacts
                 return true;
             }
             catch (Exception ex)
@@ -75,44 +85,58 @@ namespace MomentumTest.lib
             }
         }
 
-        public int createCustomer(string pFirstName, string pLastName, string pPhoneNumber, string pEmail)
+        /**
+         * method insertCustomer
+         * insert a new Customer into the database
+         * and return the (newly created) id of that Customer
+         * returns 0 on error
+         */
+        public int insertCustomer(string pFirstName, string pLastName, string pPhoneNumber, string pEmail)
         {
-            return 1;
-        }
+            SqlServer sqlsvr = new SqlServer();
+            string sql;
 
-        //************ PROPERTIES ************************/
-        public int id
-        {
-            get { return _id; }
-        }
+            try
+            {
+                SqlCommand comm = new SqlCommand();
 
-        public string firstName
-        {
-            get { return _firstName; }
-            set { _firstName = value; }
-        }
+                sql = "INSERT INTO Customer ";
+                sql += "(FirstName, LastName, PhoneNumber, Email) ";
+                sql += "VALUES ";
+                sql += "(@FirstName, @LastName, @PhoneNumber, @Email)";
+                sql += ";SELECT @@IDENTITY AS new_id FROM Customer";
 
-        public string lastName
-        {
-            get { return _lastName; }
-            set { _lastName = value; }
-        }
+                comm.CommandText = sql;
 
-        public string fullName
-        {
-            get { return _firstName + " " + _lastName; }
-        }
+                comm.Parameters.Add(new SqlParameter("@FirstName", SqlDbType.VarChar,70));
+                comm.Parameters["@FirstName"].Value = pFirstName;
 
-        public string phoneNumber
-        {
-            get { return _phoneNumber; }
-            set { _phoneNumber = value; }
-        }
+                comm.Parameters.Add(new SqlParameter("@LastName", SqlDbType.VarChar, 70));
+                comm.Parameters["@LastName"].Value = pLastName;
 
-        public string email
-        {
-            get { return _email; }
-            set { _email = value; }
+                comm.Parameters.Add(new SqlParameter("@PhoneNumber", SqlDbType.VarChar, 50));
+                comm.Parameters["@PhoneNumber"].Value = pPhoneNumber;
+
+                comm.Parameters.Add(new SqlParameter("@Email", SqlDbType.VarChar, 50));
+                comm.Parameters["@Email"].Value = pEmail;
+
+                DataSet ds = sqlsvr.runCommandReturnDataSet(comm);
+
+                if (ds == null)
+                {
+                    errorMessage = "Sql Server error in Customer.insertCustomer:" + sqlsvr.errorMessage;
+                    return 0;
+                }
+
+                id = int.Parse(ds.Tables[0].Rows[0]["new_id"].ToString());
+
+                return id;
+            }
+            catch (Exception ex)
+            {
+                errorMessage = "Exception in Customer.insertCustomer:" + ex.Message + ex.StackTrace;
+                return 0;
+            }
         }
     }
 }

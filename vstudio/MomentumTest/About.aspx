@@ -8,6 +8,6 @@
         About
     </h2>
     <p>
-        Put content here.
+        Written by John Pettit 2013.
     </p>
 </asp:Content>

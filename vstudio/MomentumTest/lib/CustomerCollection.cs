@@ -18,14 +18,26 @@ namespace MomentumTest.lib
      * then call getAllCustomers
      * to retrive the Customer list
      */
-    public class CustomerCollection : CollectionBase
+    public class CustomerCollection : List<Customer>
     {
-        public string errorMessage;
+        /**
+         * Properties
+         */
+        public string errorMessage { get; set; }
 
+        /**
+         * Constructor
+         * not much to do
+         */
         public CustomerCollection()
         {
         }
 
+        /**
+         * method getAllCustomers
+         * get all Customers in database
+         * and add them to the List
+         */
         public bool getAllCustomers()
         {
             SqlServer sqlsvr = new SqlServer();
@@ -36,7 +48,6 @@ namespace MomentumTest.lib
             try
             {
                 sql = "SELECT id FROM Customer";
-
                 ds = sqlsvr.runSqlReturnDataSet(sql);
 
                 if (ds == null)
@@ -48,16 +59,13 @@ namespace MomentumTest.lib
                 foreach (DataRow row in ds.Tables[0].Rows)
                 {
                     cu = new Customer();
-
                     if (!cu.initCustomer(int.Parse(row["id"].ToString())))
                     {
                         errorMessage = "Error initing Customer:" + cu.errorMessage;
                         return false;
                     }
-
-                    this.List.Add(cu);
+                    this.Add(cu);
                 }
-
                 return true;
             }
             catch (Exception ex)
@@ -65,15 +73,6 @@ namespace MomentumTest.lib
                 errorMessage = "Exception in CustomerCollection.getAllCustomers:" + ex.Message + ex.StackTrace;
                 return false;
             }
-        }
-
-
-        //****************************************PROPERTIES******************
-
-        public Customer this[int index]
-        {
-            get { return ((Customer)List[index]); }
-            set { List[index] = value; }
         }
     }
 }

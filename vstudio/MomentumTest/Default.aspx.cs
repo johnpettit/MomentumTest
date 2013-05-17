@@ -11,6 +11,15 @@ namespace MomentumTest
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            MomentumTest.lib.CustomerCollection cc = new lib.CustomerCollection();
+
+            if (!cc.getAllCustomers())
+            {
+                Response.Write(cc.errorMessage);
+            }
+
+            Repeater1.DataSource = cc;
+            Repeater1.DataBind();
 
         }
     }

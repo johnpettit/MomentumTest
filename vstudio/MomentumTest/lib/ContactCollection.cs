@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Collections;
+using System.Data;
 
 namespace MomentumTest.lib
 {
@@ -22,30 +23,101 @@ namespace MomentumTest.lib
      * fills its internal ContactCollection with it's
      * Contacts, so this object is rarely needed.
      */
-    public class ContactCollection : CollectionBase
+    public class ContactCollection : List<Contact>
     {
-        public string errorMessage;
+        /**
+         * Properties
+         */
+        public string errorMessage { get; set; }
 
+        /**
+         * Constructor
+         * Not much to do
+         */
         public ContactCollection()
         {
         }
 
         public bool getAllContacts()
         {
-            return true;
+            SqlServer sqlsvr = new SqlServer();
+            string sql;
+            DataSet ds;
+            Contact co;
+
+            try
+            {
+                sql = "SELECT id FROM Contact";
+
+                ds = sqlsvr.runSqlReturnDataSet(sql);
+
+                if (ds == null)
+                {
+                    errorMessage = "Sql Server error in ContactCollection.getAllContacts:" + sqlsvr.errorMessage;
+                    return false;
+                }
+
+                foreach (DataRow row in ds.Tables[0].Rows)
+                {
+                    co = new Contact();
+
+                    if (!co.initContact(int.Parse(row["id"].ToString())))
+                    {
+                        errorMessage = "Error initing Contact:" + co.errorMessage;
+                        return false;
+                    }
+
+                    this.Add(co);
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                errorMessage = "Exception in ContactCollection.getAllContacts:" + ex.Message + ex.StackTrace;
+                return false;
+            }
         }
 
         public bool getAllContactsForCustomer(int pCustomerId)
         {
-            return true;
-        }
+            SqlServer sqlsvr = new SqlServer();
+            string sql;
+            DataSet ds;
+            Contact co;
 
-        //****************************************PROPERTIES******************
+            try
+            {
+                sql = "SELECT id FROM Contact WHERE CustomerID = " + pCustomerId;
 
-        public Contact this[int index]
-        {
-            get { return ((Contact)List[index]); }
-            set { List[index] = value; }
+                ds = sqlsvr.runSqlReturnDataSet(sql);
+
+                if (ds == null)
+                {
+                    errorMessage = "Sql Server error in ContactCollection.getAllContacts:" + sqlsvr.errorMessage;
+                    return false;
+                }
+
+                foreach (DataRow row in ds.Tables[0].Rows)
+                {
+                    co = new Contact();
+
+                    if (!co.initContact(int.Parse(row["id"].ToString())))
+                    {
+                        errorMessage = "Error initing Contact:" + co.errorMessage;
+                        return false;
+                    }
+
+                    this.Add(co);
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                errorMessage = "Exception in ContactCollection.getAllContacts:" + ex.Message + ex.StackTrace;
+                return false;
+            }
         }
     }
 }

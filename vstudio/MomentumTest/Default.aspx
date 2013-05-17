@@ -5,13 +5,40 @@
 </asp:Content>
 <asp:Content ID="BodyContent" runat="server" ContentPlaceHolderID="MainContent">
     <h2>
-        Welcome to ASP.NET!
+        Welcome to MomentuM&#39;s CRM System
+
     </h2>
-    <p>
-        To learn more about ASP.NET visit <a href="http://www.asp.net" title="ASP.NET Website">www.asp.net</a>.
-    </p>
-    <p>
-        You can also find <a href="http://go.microsoft.com/fwlink/?LinkID=152368&amp;clcid=0x409"
-            title="MSDN ASP.NET Docs">documentation on ASP.NET at MSDN</a>.
-    </p>
+ 
+          <p>
+                 <asp:Repeater id=Repeater1 runat="server">
+             
+          <HeaderTemplate>
+             <table border=1 CellPadding="5">
+             <thead>
+                <tr>
+                    <td>Full Name</td>
+                    <td>Phone Number</td>
+                    <td>Email</td>
+                </tr>
+             </thead>
+             <tbody>
+          </HeaderTemplate>
+ 
+          <ItemTemplate>
+             <tr>
+                <td> <%# ((MomentumTest.lib.Customer)Container.DataItem).firstName %> <%# ((MomentumTest.lib.Customer)Container.DataItem).lastName %></td>
+                <td> <%# ((MomentumTest.lib.Customer)Container.DataItem).phoneNumber %></td>
+                <td> <%# ((MomentumTest.lib.Customer)Container.DataItem).email %></td>
+             </tr>
+          </ItemTemplate>
+ 
+          <FooterTemplate>
+                </tbody>
+             </table>
+          </FooterTemplate>
+             
+       </asp:Repeater>
+
+          </p>
+
 </asp:Content>
