@@ -97,6 +97,41 @@ namespace MomentumTest.lib
         }
 
         /**
+         * method runSqlReturnInt
+         * takes a string of sql and throws it
+         * at the database with the intention
+         * of returning an integer (counts, etc)
+         * returns -1 on error, maybe not the best choice
+         */
+        public int runSqlReturnInt(string sql)
+        {
+            if (!openConn())
+            {
+                return -1;
+            }
+
+            try
+            {
+                SqlCommand comm = new SqlCommand(sql, _conn);
+
+                int result;
+
+                result = int.Parse(comm.ExecuteScalar().ToString());
+
+                closeConn();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                errorMessage = ex.Message + " " + ex.StackTrace;
+                closeConn();
+                return -1;
+            }
+
+        }
+
+        /**
          * method openConn
          * opens a connection to the database
          */

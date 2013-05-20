@@ -7,7 +7,7 @@ namespace MomentumTest.lib
 {
     /**
      * MBase class
-     * Base class for all App classes (except Collections)
+     * Base class for all App classes (except Lists)
      * contains common items like:
      * Loggging - to do
      * Error Visibility

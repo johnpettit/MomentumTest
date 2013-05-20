@@ -29,6 +29,7 @@ namespace MomentumTest.lib
         /**
          * Constructor
          * Dont do much
+         * id == 0 means an empty Contact
          */
         public Contact()
         {
@@ -58,7 +59,7 @@ namespace MomentumTest.lib
 
                 if (ds.Tables[0].Rows.Count == 0)
                 {
-                    errorMessage = "No record";
+                    errorMessage = "No record in Contact.initContact";
                     return false;
                 }
 
@@ -82,6 +83,7 @@ namespace MomentumTest.lib
          * method insertContact
          * inserts a new Contact into the DB and
          * returns it's (newly created) id
+         * as well as populates its fields
          * Returns 0 on error
          */
         public int insertContact(int pCustomerId, DateTime pCreateDate, string pNote)
@@ -119,6 +121,9 @@ namespace MomentumTest.lib
                 }
 
                 id = int.Parse(ds.Tables[0].Rows[0]["new_id"].ToString());
+                customerId = pCustomerId;
+                createDate = pCreateDate;
+                note = pNote;
 
                 return id;
             }

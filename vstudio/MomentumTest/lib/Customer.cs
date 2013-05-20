@@ -28,11 +28,13 @@ namespace MomentumTest.lib
         public string lastName { get; set; }
         public string phoneNumber { get; set; }
         public string email { get; set; }
-        //private ContactCollection _contacts;
+        public DateTime lastContact {get; set;}
+        public ContactCollection contacts { get; set; }
 
         /**
          * Constructor
-         * just set id to a non value
+         * just set id 0
+         * id 0 indicates an empty Customer
          */
         public Customer()
         {
@@ -64,7 +66,7 @@ namespace MomentumTest.lib
 
                 if (ds.Tables[0].Rows.Count == 0)
                 {
-                    errorMessage = "No record";
+                    errorMessage = "No record in Customer.initCustomer";
                     return false;
                 }
 
@@ -75,7 +77,17 @@ namespace MomentumTest.lib
                 phoneNumber = row["PhoneNumber"].ToString();
                 email = row["Email"].ToString();
 
-                // TO DO     - init contacts
+                // fetch all Contacts for this Customer
+                // sorted by newest first
+                ContactCollection cc = new ContactCollection();
+                if (! cc.getAllContactsForCustomer(id))
+                {
+                    errorMessage = "Error getting Contacts in in Customer.initCustomer:" + cc.errorMessage;
+                    return false;
+                }
+                contacts = cc;
+                lastContact = cc[0].createDate;  //Last Contact
+
                 return true;
             }
             catch (Exception ex)
@@ -89,7 +101,11 @@ namespace MomentumTest.lib
          * method insertCustomer
          * insert a new Customer into the database
          * and return the (newly created) id of that Customer
+         * as well as populate its properties
          * returns 0 on error
+         * 
+         * NOTE Every newly created Customer get a new Contact
+         * record with the DateTime of now and a note of "Created"
          */
         public int insertCustomer(string pFirstName, string pLastName, string pPhoneNumber, string pEmail)
         {
@@ -129,6 +145,22 @@ namespace MomentumTest.lib
                 }
 
                 id = int.Parse(ds.Tables[0].Rows[0]["new_id"].ToString());
+                firstName = pFirstName;
+                lastName = pLastName;
+                phoneNumber = pPhoneNumber;
+                email = pEmail;
+                DateTime now = DateTime.Now;
+
+                Contact co = new Contact();
+                int res = co.insertContact(id, now, "Created");
+
+                if (res == 0)
+                {
+                    errorMessage = "Customer.insertCustomer error creating initial Contact:" + co.errorMessage;
+                    return 0;
+                }
+
+                lastContact = now;
 
                 return id;
             }
